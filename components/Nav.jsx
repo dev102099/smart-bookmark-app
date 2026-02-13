@@ -1,6 +1,28 @@
+"use client";
+import { createClient } from "@/utils/supabase";
+import React, { useEffect, useState } from "react";
 import React from "react";
 
 function Nav() {
+  const [user, setUser] = useState({});
+
+  const supabase = createClient();
+
+  const isUser = async () => {
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser();
+    if (user) {
+      setUser(user);
+    } else {
+      setUser({});
+    }
+    console.log(user);
+  };
+  useEffect(() => {
+    isUser();
+  }, []);
   return (
     <div className="w-screen bg-slate-800 flex justify-between p-3 items-center shadow-lg">
       <h1 className="text-white font-bold text-xl">Smart Bookmark App</h1>
