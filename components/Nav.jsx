@@ -8,7 +8,7 @@ function Nav({ user }) {
         <div className="h-10 w-10 rounded-full bg-red-400">
           <img
             src={user.user_metadata?.avatar_url}
-            alt=""
+            alt="logo"
             className="rounded-full"
           />
         </div>

@@ -1,9 +1,11 @@
 "use client";
 import Card from "@/components/Card";
 import { createClient } from "@/utils/supabase";
+import { redirect, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Home() {
+  const router = useRouter();
   const [form, setForm] = useState(true);
   const [data, setData] = useState({ title: "", url: "" });
   const [user, setUser] = useState(null);
@@ -19,6 +21,15 @@ export default function Home() {
       }
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const signOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.log(error);
+    } else {
+      router.refresh();
     }
   };
 
@@ -77,7 +88,10 @@ export default function Home() {
       <div className="p-3 flex flex-col">
         <div className="flex justify-between">
           <h1 className="text-xl font-semibold ml-3">My Bookmarks</h1>
-          <button className="p-1 pl-3 pr-3 bg-red-300 text-red-600 border border-red-600 rounded-2xl">
+          <button
+            onClick={signOut}
+            className="p-1 pl-3 pr-3 bg-red-300 text-red-600 border border-red-600 rounded-2xl"
+          >
             SignOut
           </button>
         </div>
