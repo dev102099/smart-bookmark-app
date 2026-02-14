@@ -1,7 +1,7 @@
 "use client";
 import Card from "@/components/Card";
 import { createClient } from "@/utils/supabase";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const [form, setForm] = useState(true);
@@ -30,20 +30,47 @@ export default function Home() {
 
     getUser();
   }, []);
+
   useEffect(() => {
+    if (!user) return;
+
     const getBookmarks = async () => {
-      if (!user) return;
       const { data, error } = await supabase
         .from("bookmarks")
         .select()
-        .eq("email", user?.email);
+        .eq("email", user.email);
+
       if (!error) {
         setBookmarks(data);
       } else {
-        console.log(error);
+        console.error("Fetch error:", error);
       }
     };
+
     getBookmarks();
+
+    const channel = supabase
+      .channel("custom-bookmark-channel")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "bookmarks",
+        },
+        (payload) => {
+          console.log(" Database changed! Payload:", payload);
+
+          getBookmarks();
+        },
+      )
+      .subscribe((status) => {
+        console.log("WebSocket Status:", status);
+      });
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [user]);
   return (
     <>
@@ -93,7 +120,6 @@ export default function Home() {
             Submit
           </button>
         </div>
-        {console.log(data)}
         <div className="lg:w-[40%] lg:self-center bg-gray-100 p-2 shadow-sm">
           {bookmarks.map((bookmark) => {
             return <Card key={bookmark.id} bookmark={bookmark} />;
