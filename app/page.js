@@ -137,7 +137,7 @@ export default function Home() {
             Submit
           </button>
         </div>
-        <div className="lg:w-[40%] lg:self-center bg-gray-100 p-2 shadow-sm">
+        <div className="lg:w-[40%] overflow-scroll mb-5 max-h-[60vh] lg:self-center bg-gray-100 p-2 shadow-sm">
           {bookmarks.map((bookmark) => {
             return <Card key={bookmark.id} bookmark={bookmark} />;
           })}

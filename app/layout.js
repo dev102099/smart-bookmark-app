@@ -26,7 +26,7 @@ export default async function RootLayout({ children }) {
   } = await supabase.auth.getUser();
 
   return (
-    <html className="h-screen w-screen" lang="en">
+    <html className="h-screen w-screen overflow-hidden" lang="en">
       <body
         className={`relative ${geistSans.variable} ${geistMono.variable} antialiased bg-gray-200`}
       >
