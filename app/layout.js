@@ -24,7 +24,7 @@ export default async function RootLayout({ children }) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  console.log(user);
+
   return (
     <html className="h-screen w-screen" lang="en">
       <body

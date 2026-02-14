@@ -15,9 +15,12 @@ export default function Home() {
   const onSubmit = async () => {
     try {
       if (data.title && data.url) {
-        await supabase
+        const { error } = await supabase
           .from("bookmarks")
           .insert({ title: data.title, url: data.url, email: user.email });
+
+        if (error) alert("Something went wrong.");
+        if (!error) alert("Success!");
       }
     } catch (error) {
       console.log(error);

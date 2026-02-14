@@ -8,7 +8,7 @@ function Card({ bookmark }) {
   const onDelete = async (id) => {
     try {
       const res = await supabase.from("bookmarks").delete().eq("id", id);
-      console.log(res);
+      alert("Deleted!");
     } catch (error) {
       console.log(error);
     }
